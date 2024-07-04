@@ -1,0 +1,13 @@
+# 已经是顶层配置文件，不必继续向上搜索
+root = true
+
+[**]
+# 缩进风格
+indent_style = tab
+# 一个缩进占2个空格
+indent_size = 2
+tab_width = 2
+# 换行符
+end_of_line = lf
+# 去除行首的任意空白字符
+trim_trailing_whitespace = true

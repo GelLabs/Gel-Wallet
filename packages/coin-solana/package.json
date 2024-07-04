@@ -1,0 +1,29 @@
+{
+	"name": "@web3jskit/coin-solana",
+	"version": "1.0.3",
+	"description": "",
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build": "run-s clean build:main",
+		"build:main": "tsc -p tsconfig.json",
+		"clean": "rimraf dist tsconfig.tsbuildinfo",
+		"test": "jest"
+	},
+	"license": "MIT",
+	"files": [
+		"dist"
+	],
+	"dependencies": {
+		"@metaplex-foundation/js": "^0.20.1",
+		"@solana/spl-token": "^0.4.6",
+		"@solana/web3.js": "^1.93.0",
+		"@web3jskit/crypto-lib": "workspace:^",
+		"@web3jskit/coin-base": "workspace:^"
+	}
+}

@@ -1,0 +1,15 @@
+.idea/*
+build
+dist
+node_modules
+coverage
+*.log
+.env.local
+.DS_Store
+*.tsbuildinfo
+*.tgz
+package-lock.json
+.eslintcache
+example/*
+publish.sh
+

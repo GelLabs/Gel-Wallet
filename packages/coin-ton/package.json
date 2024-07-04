@@ -1,0 +1,35 @@
+{
+	"name": "@web3jskit/ton",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build": "run-s clean build:main",
+		"build:main": "tsc -p tsconfig.json",
+		"clean": "rimraf dist tsconfig.tsbuildinfo",
+		"test": "vitest"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@ton/core": "^0.56.3",
+		"@ton/crypto": "^3.2.0",
+		"@ton/ton": "^13.11.2",
+		"@web3jskit/coin-base": "workspace:^",
+		"@web3jskit/crypto-lib": "^1.0.1",
+		"buffer": "^6.0.3",
+		"tonweb": "^0.0.66"
+	},
+	"devDependencies": {
+		"vitest": "^1.4.0"
+	},
+	"vitest": {
+		"testTimeout": 10000
+	}
+}

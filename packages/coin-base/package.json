@@ -1,0 +1,20 @@
+{
+	"name": "@web3jskit/coin-base",
+	"version": "1.0.1",
+	"description": "",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"build": "run-s clean build:main",
+		"build:main": "tsc -p tsconfig.json",
+		"clean": "rimraf dist tsconfig.tsbuildinfo",
+		"test": "jest"
+	},
+	"license": "MIT",
+	"files": [
+		"dist"
+	],
+	"dependencies": {
+		"@web3jskit/crypto-lib": "1.0.1"
+	}
+}

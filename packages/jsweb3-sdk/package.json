@@ -1,0 +1,29 @@
+{
+	"name": "@web3jskit/sdk",
+	"version": "1.0.4",
+	"description": "",
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build": "run-s clean build:main",
+		"build:main": "tsc -p tsconfig.json",
+		"clean": "rimraf dist tsconfig.tsbuildinfo"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"files": [
+		"dist"
+	],
+	"dependencies": {
+		"@web3jskit/coin-ethereum": "workspace:^",
+		"@web3jskit/coin-put": "workspace:^",
+		"@web3jskit/coin-solana": "workspace:^",
+		"@web3jskit/coin-base": "workspace:^"
+	}
+}
