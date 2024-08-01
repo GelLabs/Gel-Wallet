@@ -1,6 +1,6 @@
-# GelID
+# Gel Wallet
 
-This is monorepo for GelID JavaScript SDK.
+This is monorepo for Gel Wallet JavaScript SDK.
 
 ## Overview
 
@@ -30,7 +30,12 @@ async function connect() {
 	const web3Kit = new Web3Kit();
 	const serRes: IConnectRes = await web3Kit.request({
 		chainType: ChainType.EVM,
-		methodName: 'connect'
+		methodName: 'eth_requestAccounts',
+		params: [
+			{
+				chainId: '0x1'
+			}
+		]
 	});
 }
 
