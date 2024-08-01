@@ -1,5 +1,5 @@
-import { RequestParams, ChainType } from '../..';
-
+import { ChainType } from '@web3jskit/type';
+import { RequestParams } from '../types';
 export class EvmProvider {
 	isMetaMask = true;
 	chainId?: string;

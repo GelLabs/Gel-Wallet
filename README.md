@@ -9,7 +9,7 @@ This is monorepo for GelID JavaScript SDK.
 - `@web3jskit/coin-put`: SDK for `PUT` chain assets.
 - `@web3jskit/dapp`: SDK for DApp developers.
 
-Most developers can directly use `@web3jskit/dapp` to complete most job. full [documentation](https://doc-did.put.com)
+Most developers can directly use `@web3jskit/dapp` to complete most job. full [documentation](https://doc.gelwallet.com)
 
 ## Development
 

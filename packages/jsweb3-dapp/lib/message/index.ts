@@ -1,6 +1,8 @@
 import { v4 as randomUUID } from 'uuid';
+import { PublicKey } from '@solana/web3.js';
 import { Modal } from '../ui/modal';
-import { Metadata, ChainType } from '../types/dapp.type';
+import { Metadata } from '../types/dapp.type';
+import { ChainType, DID_EVENT_NAME } from '@web3jskit/type';
 
 interface SendArgs {
 	chainType: ChainType;
@@ -21,14 +23,7 @@ export enum MessageType {
 	didEvent = 'did_event'
 }
 
-export enum DID_EVENT_NAME {
-	LOADED = 'loaded',
-	OPEN = 'open',
-	CLOSE = 'close',
-	ACCOUNTS_CHANGED = 'accountsChanged',
-	CHAIN_CHANGED = 'chainChanged',
-	DISCONNECT = 'disconnect'
-}
+export { DID_EVENT_NAME };
 
 export class PostMessage {
 	private static _instance: PostMessage;
@@ -104,12 +99,59 @@ export class PostMessage {
 						const { origin, net } = msgData.data;
 						if (origin !== window.location.origin) return;
 						event(net);
+					},
+					[DID_EVENT_NAME.TRON_SET_ACCOUNT]: () => {
+						const event = this.eventListenerMap.tronSetAccount;
+						if (typeof event !== 'function') return;
+						event(msgData.data);
+					},
+					[DID_EVENT_NAME.TRON_SET_NODE]: () => {
+						const event = this.eventListenerMap.tronSetNode;
+						if (typeof event !== 'function') return;
+						event(msgData.data);
 					}
 				};
 				const event = events[eventName];
 				typeof event === 'function' && event();
 			}
 		}
+	};
+
+	private readonly _generateResponse = async (message: {
+		target: string;
+		type: string;
+		messageId: string;
+		data: SendArgs;
+	}) => {
+		await this.modal.waitReady();
+		const sdkWindow = await this.modal.getSDKWindow();
+		return new Promise((resolve, reject) => {
+			let confirmResponse = (data: any) => {
+				resolve(data);
+			};
+			if (message.data.chainType === ChainType.SOL && message.data.methodName === 'connect') {
+				confirmResponse = data => {
+					console.log('data===>', data.publicKey);
+
+					data.publicKey = new PublicKey(data.publicKey);
+					resolve(data);
+				};
+			}
+			PostMessage.promiseMap[message.messageId] = { resolve: confirmResponse, reject };
+			sdkWindow.postMessage(message, '*');
+		});
+	};
+	sendDidMsg = async (data: { methodName: string; metadata: Metadata; params?: any }) => {
+		await this.modal.waitReady();
+		const sdkWindow = await this.modal.getSDKWindow();
+		const messageId = randomUUID();
+		const message = {
+			target: PostMessage.DAPP_MESSAGE_TARGET,
+			type: MessageType.didEvent,
+			messageId,
+			data
+		};
+		return sdkWindow.postMessage(message, '*');
 	};
 	send = async (data: SendArgs) => {
 		const messageId = randomUUID();
@@ -119,12 +161,8 @@ export class PostMessage {
 			messageId,
 			data
 		};
-		await this.modal.waitReady();
-		const sdkWindow = await this.modal.getSDKWindow();
-		return new Promise((resolve, reject) => {
-			PostMessage.promiseMap[messageId] = { resolve, reject };
-			sdkWindow.postMessage(message, '*');
-		});
+
+		return this._generateResponse(message);
 	};
 	on = (eventName: string, callback: (value: any) => void) => {
 		this.eventListenerMap[eventName] = callback;

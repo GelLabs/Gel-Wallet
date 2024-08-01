@@ -4,7 +4,7 @@ import * as solSdk from '@web3jskit/coin-solana';
 import { EstimateTransferGasParams, EstimateTransferTokenGasParams } from '@web3jskit/coin-base';
 import { ChainType } from './typing';
 import * as tonSdk from '@web3jskit/ton';
-
+import * as tronSdk from '@web3jskit/coin-tron';
 export function requestRpc<T = any, P = any>(chainType: ChainType, rpc: string, method: string, params?: P) {
 	switch (chainType) {
 		case ChainType.PUT:
@@ -39,6 +39,8 @@ export function validAddress(chainType: ChainType, address: string): boolean {
 			return ethSdk.validAddress(address);
 		case ChainType.SOL:
 			return solSdk.validAddress(address);
+		case ChainType.Tron:
+			return tronSdk.validAddress(address);
 		case ChainType.TON:
 		case ChainType.TON_TEST:
 			return tonSdk.validAddress(address, chainType as any);
@@ -68,6 +70,8 @@ export function checkMnemonic(chainType: ChainType, mnemonic: string): boolean {
 			return ethSdk.checkMnemonic(mnemonic);
 		case ChainType.SOL:
 			return solSdk.checkMnemonic(mnemonic);
+		case ChainType.Tron:
+			return tronSdk.checkMnemonic(mnemonic);
 		default:
 			throw new Error(`Unsupported chain type: ${chainType}`);
 	}
@@ -81,6 +85,8 @@ export function createWallet(chainType: ChainType, hdPath?: string) {
 			return ethSdk.createWallet(hdPath);
 		case ChainType.SOL:
 			return solSdk.createWallet(hdPath);
+		case ChainType.Tron:
+			return tronSdk.createWallet();
 		default:
 			throw new Error(`Unsupported chain type: ${chainType}`);
 	}
@@ -94,6 +100,8 @@ export function getAddressByPrivateKey(chainType: ChainType, privateKey: string)
 			return ethSdk.getAddressByPrivateKey(privateKey);
 		case ChainType.SOL:
 			return solSdk.getAddressByPrivateKey(privateKey);
+		case ChainType.Tron:
+			return tronSdk.getAddressByPrivateKey(privateKey);
 		default:
 			throw new Error(`Unsupported chain type: ${chainType}`);
 	}
@@ -107,6 +115,8 @@ export function getPrivateKeyByMnemonic(chainType: ChainType, mnemonic: string, 
 			return ethSdk.getPrivateKeyByMnemonic(mnemonic, hdPath);
 		case ChainType.SOL:
 			return solSdk.getPrivateKeyByMnemonic(mnemonic, hdPath);
+		case ChainType.Tron:
+			return tronSdk.getPrivateKeyByMnemonic(mnemonic);
 		default:
 			throw new Error(`Unsupported chain type: ${chainType}`);
 	}
@@ -120,6 +130,8 @@ export function getBalance(chainType: ChainType, address: string, rpc: string) {
 			return ethSdk.getBalance(address, rpc);
 		case ChainType.SOL:
 			return solSdk.getBalance(address, rpc);
+		case ChainType.Tron:
+			return tronSdk.getBalance(address, rpc);
 		default:
 			throw new Error(`Unsupported chain type: ${chainType}`);
 	}
@@ -133,6 +145,8 @@ export function getTokenBalance(chainType: ChainType, address: string, tokenAddr
 			return ethSdk.getTokenBalance(address, tokenAddress, rpc);
 		case ChainType.SOL:
 			return solSdk.getTokenBalance(address, tokenAddress, rpc);
+		case ChainType.Tron:
+			return tronSdk.getTokenBalance(address, tokenAddress, rpc);
 		default:
 			throw new Error(`Unsupported chain type: ${chainType}`);
 	}
@@ -159,19 +173,6 @@ export function sendRawTransaction(chainType: ChainType, rawTx: string, rpc: str
 			return ethSdk.sendRawTransaction(rawTx, rpc);
 		case ChainType.SOL:
 			return solSdk.sendRawTransaction(rawTx, rpc);
-		default:
-			throw new Error(`Unsupported chain type: ${chainType}`);
-	}
-}
-
-export function estimateGasByRawTx(chainType: ChainType, rawTx: string, rpc: string) {
-	switch (chainType) {
-		case ChainType.PUT:
-			return putSdk.estimateGasByRawTx(rawTx, rpc);
-		case ChainType.EVM:
-			return ethSdk.estimateGasByRawTx(rawTx, rpc);
-		case ChainType.SOL:
-			return solSdk.estimateGasByRawTx(rawTx, rpc);
 		default:
 			throw new Error(`Unsupported chain type: ${chainType}`);
 	}

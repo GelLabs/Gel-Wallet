@@ -1,8 +1,4 @@
-export enum ChainType {
-	EVM = 'Ethereum',
-	PUT = 'PUT',
-	SOL = 'Solana'
-}
+import { ChainType } from '@web3jskit/type';
 
 export interface RequestArgs<T = any> {
 	chainType: ChainType;
@@ -31,4 +27,9 @@ export interface IDappConfig {
 		class?: string;
 		style?: string;
 	};
+}
+
+export interface RequestParams {
+	method: string;
+	params: any;
 }

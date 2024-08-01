@@ -1,8 +1,12 @@
 {
 	"name": "@web3jskit/coin-solana",
-	"version": "1.0.3",
+	"version": "1.0.7",
 	"description": "",
 	"type": "module",
+	"repository": {
+		"type": "github",
+		"url": "https://github.com/GelLabs/Gel-Wallet"
+	},
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
@@ -23,7 +27,7 @@
 		"@metaplex-foundation/js": "^0.20.1",
 		"@solana/spl-token": "^0.4.6",
 		"@solana/web3.js": "^1.93.0",
-		"@web3jskit/crypto-lib": "workspace:^",
-		"@web3jskit/coin-base": "workspace:^"
+		"@web3jskit/crypto-lib": "^1.0.2",
+		"@web3jskit/coin-base": "^1.0.2"
 	}
 }

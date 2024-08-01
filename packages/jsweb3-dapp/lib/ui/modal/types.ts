@@ -1,3 +1,8 @@
+export enum LoginMode {
+	PASSKEY = 'Passkey',
+	PASSWORD = 'Password'
+}
+
 export interface IModalConfig {
 	url: string;
 	did?: {
@@ -15,5 +20,10 @@ export interface IModalConfig {
 		put?: boolean;
 		ethereum?: boolean;
 		solana?: boolean;
+		tronLink?: boolean;
 	};
+	loginModes?: LoginMode[];
+	height?: number | string;
+	maxheight?: number | string;
+	onLoad?: () => void;
 }

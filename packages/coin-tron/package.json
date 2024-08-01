@@ -1,17 +1,11 @@
 {
-	"name": "@web3jskit/ton",
-	"version": "1.0.7",
+	"name": "@web3jskit/coin-tron",
+	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
 	"repository": {
 		"type": "github",
 		"url": "https://github.com/GelLabs/Gel-Wallet"
-	},
-	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		}
 	},
 	"scripts": {
 		"build": "run-s clean build:main",
@@ -19,16 +13,16 @@
 		"clean": "rimraf dist tsconfig.tsbuildinfo",
 		"test": "vitest"
 	},
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
 	"author": "",
-	"license": "ISC",
+	"license": "MIT",
 	"dependencies": {
-		"@ton/core": "^0.56.3",
-		"@ton/crypto": "^3.2.0",
-		"@ton/ton": "^13.11.2",
-		"@web3jskit/coin-base": "^1.0.2",
-		"@web3jskit/crypto-lib": "^1.0.2",
-		"buffer": "^6.0.3",
-		"tonweb": "^0.0.66"
+		"tronweb": "^5.3.2"
 	},
 	"devDependencies": {
 		"vitest": "^1.4.0"

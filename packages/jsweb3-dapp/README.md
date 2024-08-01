@@ -34,7 +34,7 @@ function multiple() {
         methodName: "connect",
       },
       {
-        methodName: "put_signMessage",
+        methodName: "signMessage",
         params: {
           message: "", // base58
           display: "utf8",

@@ -1,88 +1,100 @@
 import { PostMessage } from './message';
-import { Metadata, MultipleRequestArgs, RequestArgs, ChainType } from './types/dapp.type';
+import { Metadata, MultipleRequestArgs, RequestArgs } from './types/dapp.type';
 import { Modal } from './ui/modal';
-import { IModalConfig } from './ui/modal/types';
+import { IModalConfig, LoginMode } from './ui/modal/types';
 import logo from './assets/logo.png';
 import { getMetadata } from './api/utils/common';
-import { EvmProvider } from './provider/evm';
-import { SolanaProvider } from './provider/solana';
-import { PutProvider } from './provider/put';
 
-export { ChainType };
+import { ChainType, PutNetType, SolNetType } from '@web3jskit/type';
 
-export interface RequestParams {
-	method: string;
-	params: any;
-}
-
-interface Provider {
-	put: PutProvider;
-	solana: SolanaProvider;
-	ethereum: EvmProvider;
-}
+export { ChainType, PutNetType, SolNetType };
 
 export class Web3Kit {
 	private static _instance: Web3Kit | undefined;
-	private static userConf: Omit<IModalConfig, 'url'> = {};
+	private static userConf: Omit<IModalConfig, 'url' | 'onLoad'> = {};
 	// @ts-expect-error - Singleton object
 	private message: PostMessage;
 	// @ts-expect-error - Singleton object
 	private metadata: Metadata;
 	ready: boolean = false;
-	// @ts-expect-error - Singleton object
-	readonly provider: Provider;
 	constructor() {
 		if (Web3Kit._instance) return Web3Kit._instance;
 		const modal = new Modal({
 			...Web3Kit.userConf,
-			url: import.meta.env.VITE_APP_DID_DOMAIN
+			url: import.meta.env.VITE_APP_DID_DOMAIN,
+			onLoad: this.loaded
 		});
 		this.message = new PostMessage(modal);
 		this.metadata = getMetadata();
 		Web3Kit._instance = this;
-		const putProvider = new PutProvider(this);
-		const solanaProvider = new SolanaProvider(this);
-		const ethereumProvider = new EvmProvider(this);
-		this.provider = {
-			put: putProvider,
-			solana: solanaProvider,
-			ethereum: ethereumProvider
-		};
 
-		if (Web3Kit.userConf.takeover?.put ?? true) {
-			try {
-				Object.defineProperty(globalThis, 'put', {
-					value: putProvider,
-					writable: false
-				});
-			} catch (err) {
-				console.error(err);
-			}
+		if (Web3Kit.userConf.takeover?.put) {
+			import('./provider/put').then(({ PutProvider }) => {
+				const putProvider = new PutProvider(this);
+				try {
+					Object.defineProperty(globalThis, 'put', {
+						value: putProvider,
+						writable: false
+					});
+				} catch (err) {
+					console.error(err);
+				}
+			});
 		}
 
-		if (Web3Kit.userConf.takeover?.solana ?? true) {
-			try {
-				Object.defineProperty(globalThis, 'solana', {
-					value: solanaProvider,
-					writable: false
-				});
-			} catch (err) {
-				console.error(err);
-			}
+		if (Web3Kit.userConf.takeover?.solana) {
+			import('./provider/solana').then(({ SolanaProvider }) => {
+				const solanaProvider = new SolanaProvider(this);
+				try {
+					Object.defineProperty(globalThis, 'solana', {
+						value: solanaProvider,
+						writable: false
+					});
+				} catch (err) {
+					console.error(err);
+				}
+			});
 		}
 
-		if (Web3Kit.userConf.takeover?.ethereum ?? true) {
-			try {
-				Object.defineProperty(globalThis, 'ethereum', {
-					value: ethereumProvider,
-					writable: false
-				});
-			} catch (err) {
-				console.error(err);
-			}
+		if (Web3Kit.userConf.takeover?.ethereum) {
+			import('./provider/evm').then(({ EvmProvider }) => {
+				const ethereumProvider = new EvmProvider(this);
+				try {
+					Object.defineProperty(globalThis, 'ethereum', {
+						value: ethereumProvider,
+						writable: false
+					});
+				} catch (err) {
+					console.error(err);
+				}
+			});
+		}
+		if (Web3Kit.userConf.takeover?.tronLink) {
+			import('./provider/tron').then(({ TronProvider }) => {
+				const tronProvider = new TronProvider(this);
+				try {
+					Object.defineProperty(globalThis, 'tronLink', {
+						value: tronProvider,
+						writable: false
+					});
+				} catch (err) {
+					console.error(err);
+				}
+			});
 		}
 	}
-
+	loaded = () => {
+		const loginModes = Web3Kit.userConf?.loginModes || [];
+		const modes = Object.values(LoginMode);
+		const isSetModal = (loginModes || []).find(item => modes.includes(item));
+		if (isSetModal) {
+			this.message.sendDidMsg({
+				methodName: 'inner_set_login_modals',
+				metadata: this.metadata,
+				params: loginModes
+			});
+		}
+	};
 	private static generateEvokingButton = () => {
 		const btnEle = document.createElement('div');
 		btnEle.style.cssText = `

@@ -1,8 +1,12 @@
 {
 	"name": "@web3jskit/sdk",
-	"version": "1.0.4",
+	"version": "1.0.6",
 	"description": "",
 	"type": "module",
+	"repository": {
+		"type": "github",
+		"url": "https://github.com/GelLabs/Gel-Wallet"
+	},
 	"exports": {
 		".": {
 			"import": "./dist/index.js",

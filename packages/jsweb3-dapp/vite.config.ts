@@ -10,7 +10,7 @@ export default defineConfig({
 		lib: {
 			entry: resolve(__dirname, 'lib/index.ts'),
 			name: 'dapp',
-			fileName: 'dapp',
+			fileName: format => `dapp.${format}.js`, // 输出文件名
 			formats: ['es', 'iife']
 		}
 	}

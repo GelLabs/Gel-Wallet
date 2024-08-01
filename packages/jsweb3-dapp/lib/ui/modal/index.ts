@@ -10,7 +10,6 @@ export class Modal {
 	private static _instance: Modal;
 	private static sdkWindow: Window;
 	private isLoadingDefault: boolean = false;
-
 	readyState: boolean | 'padding' = false;
 	userConf: IModalConfig = { url: '' };
 
@@ -31,9 +30,15 @@ export class Modal {
 			const containerEle = modalConf.container;
 			return containerEle;
 		}
+		let height = this.userConf.height || 'calc(100% - 20px)';
+		let maxHeight = this.userConf.maxheight || '812px';
+		height = typeof height === 'number' ? `${height}px` : height;
+		maxHeight = typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight;
 		const body = document.body;
 		const containerEle = document.createElement('div');
 		containerEle.id = CONTAINER_ID;
+		containerEle.style.height = height;
+		containerEle.style.maxHeight = maxHeight;
 		containerEle.className = `${CONTAINER_ID}_hide`; // Default className
 		body.appendChild(containerEle);
 		return containerEle;
@@ -48,14 +53,11 @@ export class Modal {
         top: 40px;
         right: 40px;
         width: 375px;
-        height: calc(100% - 20px);
-        max-height: 812px;
         overflow: hidden;
         box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.10);
         z-index: 999999999;
         cursor: grab;
         border-radius: 17px;
-        padding: 3px;
         background-color: #ddd;
       }
       .${CONTAINER_ID}_hide {
@@ -64,8 +66,11 @@ export class Modal {
         z-index: -999;
       }
       #${CONTAINER_ID} > #${IframeID} {
-        width: 100%;
-        height: 100%;
+		position: absolute;
+        left: 3px;
+		top: 3px;
+		width: calc(100% - 6px);
+		height: calc(100% - 6px);
         background-color: #fff;
         border-radius: 15px;
       }
@@ -93,6 +98,10 @@ export class Modal {
         }
         #${CONTAINER_ID} > #${IframeID} {
           border-radius: 0;
+		  width: 100%;
+		  height: 100%;
+		  left: 0;
+		  top: 0;
         }
       }
     `;
@@ -167,10 +176,10 @@ export class Modal {
 		iframe?.addEventListener('mousedown', stop, false);
 	};
 	private loadIframe = (container: HTMLDivElement) => {
+		// const height = this.
 		const htmlStr = `
       <iframe
         id="${IframeID}"
-        style="width:100%;height:100%;"
         allow-top-navigation="true"
         allow="publickey-credentials-create *;publickey-credentials-get *;camera *"
         src="${this.userConf.url}"
@@ -204,6 +213,9 @@ export class Modal {
 		if (this.readyState === true) return;
 		this.readyState = true;
 		const body = document.body;
+		if (typeof this.userConf.onLoad === 'function') {
+			this.userConf.onLoad();
+		}
 		if (this.isLoadingDefault) {
 			const loadingNode = document.getElementById(LoadingID);
 			loadingNode && body.removeChild(loadingNode);

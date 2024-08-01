@@ -1,9 +1,13 @@
 {
 	"name": "@web3jskit/coin-base",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
+	"repository": {
+		"type": "github",
+		"url": "https://github.com/GelLabs/Gel-Wallet"
+	},
 	"scripts": {
 		"build": "run-s clean build:main",
 		"build:main": "tsc -p tsconfig.json",
@@ -15,6 +19,6 @@
 		"dist"
 	],
 	"dependencies": {
-		"@web3jskit/crypto-lib": "1.0.1"
+		"@web3jskit/crypto-lib": "1.0.2"
 	}
 }

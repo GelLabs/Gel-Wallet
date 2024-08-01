@@ -136,10 +136,11 @@ export function validAddress(address: string) {
 }
 
 const hex2string = (hex: string) => {
-	if (base.isHexString(hex)) {
-		return base.fromBigIntHex(hex).toString(10);
+	const formatHex = hex === '0x' ? '0x0' : hex;
+	if (base.isHexString(formatHex)) {
+		return base.fromBigIntHex(formatHex).toString(10);
 	} else {
-		return hex;
+		return formatHex;
 	}
 };
 
@@ -218,7 +219,8 @@ export function signTransaction(params: EthTxParams, privateKey: string) {
 		let value = txParams.value;
 		let data: string | undefined;
 		if (tokenAddress) {
-			data = '0x' + abi.ABI.simpleEncode('transfer(address,uint256)', toAddress, value).toString('hex');
+			data =
+				txParams.data || '0x' + abi.ABI.simpleEncode('transfer(address,uint256)', toAddress, value).toString('hex');
 			toAddress = tokenAddress;
 			value = '0x0';
 		} else {
@@ -336,10 +338,19 @@ export function verifyMessage(messageType: MessageTypes, message: string, signat
 export const encrypt = sigUtil.encrypt;
 export const decrypt = sigUtil.decrypt;
 
-export async function estimateGasByRawTx(rawTx: string, rpc: string): Promise<string> {
+export async function estimateGas(
+	data: {
+		from?: string;
+		to?: string;
+		value?: string;
+		input?: string;
+		gas?: string;
+		gasPrice?: string;
+	},
+	rpc: string
+) {
 	try {
-		const transaction = TransactionFactory.fromSerializedData(base.fromHex(rawTx));
-		const gasFee = await requestRpc<string>(rpc, 'eth_estimateGas', [transaction.toJSON()]);
+		const gasFee = await requestRpc<string>(rpc, 'eth_estimateGas', [data, 'latest']);
 		return Promise.resolve(hex2string(gasFee));
 	} catch (e) {
 		return Promise.reject(e);

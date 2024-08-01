@@ -1,4 +1,4 @@
-import { ChainType } from '../../types/dapp.type';
+import { ChainType } from '@web3jskit/type';
 import { RequestParams } from '../types';
 
 export interface SignMessageParams {

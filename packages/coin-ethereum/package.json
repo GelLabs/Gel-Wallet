@@ -1,7 +1,11 @@
 {
 	"name": "@web3jskit/coin-ethereum",
-	"version": "1.0.4",
+	"version": "1.0.8",
 	"description": "",
+	"repository": {
+		"type": "github",
+		"url": "https://github.com/GelLabs/Gel-Wallet"
+	},
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
@@ -21,7 +25,7 @@
 	"dependencies": {
 		"eth-sig-util": "^3.0.1",
 		"superstruct": "^1.0.3",
-		"@web3jskit/crypto-lib": "^1.0.1",
-		"@web3jskit/coin-base": "workspace:^"
+		"@web3jskit/crypto-lib": "^1.0.2",
+		"@web3jskit/coin-base": "^1.0.2"
 	}
 }

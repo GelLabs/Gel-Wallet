@@ -1,8 +1,8 @@
 {
-	"name": "@web3jskit/coin-put",
-	"version": "1.0.7",
+	"name": "@web3jskit/type",
+	"version": "1.0.5",
 	"description": "",
-	"type": "module",
+	"main": "./src/index.ts",
 	"repository": {
 		"type": "github",
 		"url": "https://github.com/GelLabs/Gel-Wallet"
@@ -17,17 +17,9 @@
 		"build": "run-s clean build:main",
 		"build:main": "tsc -p tsconfig.json",
 		"clean": "rimraf dist tsconfig.tsbuildinfo",
-		"test": "jest"
+		"test": "echo \"Error: no test specified\" && exit 1"
 	},
+	"keywords": [],
 	"author": "",
-	"license": "MIT",
-	"files": [
-		"dist"
-	],
-	"dependencies": {
-		"@com.put/web3.js": "^1.0.1",
-		"@com.put/ppl-token": "^1.0.1",
-		"@web3jskit/crypto-lib": "^1.0.2",
-		"@web3jskit/coin-base": "^1.0.2"
-	}
+	"license": "ISC"
 }
